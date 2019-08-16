@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Index</title>
+    <link rel="stylesheet" href="static/css/flex.css" media="(min-width: 1280px)">
+    <link rel="stylesheet" href="static/css/flex_mobile.css" media="(min-width: 320px) and (max-width: 767px)">
+    <link rel="stylesheet" href="static/css/flex_tablet.css" media="(min-width: 768px) and (max-width: 1279px)">
+    <link rel="stylesheet" href="static/css/portal.css" media="(min-width: 1280px)">
+    <link rel="stylesheet" href="static/css/portal_mobile.css" media="(min-width: 320px) and (max-width: 767px)">
+    <link rel="stylesheet" href="static/css/portal_tablet.css" media="(min-width: 768px) and (max-width: 1279px)">
+    <script type="text/javascript" src="webjars/jquery/jquery.js"></script>
+    <script type="text/javascript" src="webjars/jquery-ui/js/jquery-ui-1.9.0.custom.js"></script>
+    <script type="text/javascript" src="webjars/jquery-file-upload/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="webjars/jquery-file-upload/js/jquery.fileupload-process.js"></script>
+    <script type="text/javascript" src="webjars/jquery-file-upload/js/jquery.iframe-transport.js"></script>
+
+</head>
+<body>
+<h1>Hello! AmazonS3 access sample!</h1>
+
+
+<h2>Get S3 image via Controller</h2>
+<img src="image" />
+
+<h2>Get S3 Text File body via Controller</h2>
+<form id="getTextFileBody" action="getTextFileBody" method="get" >
+    <button id="getTextFileBodyButton" name="getTextFileBodyButton" class="main-button" type="button" onclick="getTextFileBodyInS3()" >Get TextFile Body</button>
+</form>
+
+<div id="result"></div>
+
+<h2>Upload File to S3 via Controller</h2>
+<form id="form" action="upload" method="post" enctype="multipart/form-data">
+    <input id="uploadFile" name="uploadFile" type="file" value=""/>
+    <button id="confrim" name="confrim" class="main-button" type="submit" value="Submit">ファイルアップロード</button>
+</form>
+
+<h2>Get S3 image directly.</h2>
+<img th:src="*{imageUrl}" />
+
+<h2>Get S3 Text File directly</h2>
+<form id="downloadFileForm" action="/downloadFile" method="get" >
+    <button id="downloadFileBodyButton" name="downloadFileBodyButton" class="main-button" type="button" onclick="downloadFile()" >Get TextFile</button>
+</form>
+
+<h2>Upload File to S3 directly</h2>
+
+<form id="directUploadForm" action="" method="" enctype="multipart/form-data">
+    <input id="directUploadInput" name="uploadFiles" multiple type="file" data-authorization-url="/upload/authorization" />
+</form>
+
+</body>
+<script type="text/javascript" src="static/js/portal.js"></script>

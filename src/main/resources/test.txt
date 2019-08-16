@@ -1,0 +1,1 @@
+The message in text file uploaded to S3.
