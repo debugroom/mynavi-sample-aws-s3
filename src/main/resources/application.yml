@@ -1,0 +1,30 @@
+spring:
+  profiles:
+    active: dev
+cloud:
+  aws:
+    stack:
+      auto: false
+bucket:
+  name: debugroom-mynavi-sample
+s3:
+  upload:
+    role:
+      name: mynavi-sample-s3-upload-role
+      session:
+        name: mynavi-sample
+    duration:
+      seconds: 86400
+    limitBytes: 10000000000
+    acl: private
+  download:
+    role:
+      name: mynavi-sample-s3-download-role
+      session:
+        name: mynavi-sample
+    duration:
+      seconds: 600
+sts:
+  min:
+    duration:
+      minutes: 15

@@ -10,27 +10,21 @@ function getTextFileBodyInS3() {
     });
 }
 
-function downloadFile() {
-    $.get("/downloadFile", function (data) {
-        var downloadLink = document.createElement("a");
-        downloadLink.href = data.toString();
-        downloadLink.click();
-    })
-}
-
 function uploadFiles(){
     var progressPanel = $("#progress");
     if(progressPanel != null){
         progressPanel.remove();
     }
+    // ダイアログボタンを押すと表示する。
     $("#directUploadForm").after('<div id="progress"><span id="pre-message" class="errorMessage">アップロードの準備中…</span></div>');
     var formData = new FormData;
+    // ダイアログを選択すると呼ばれる。
     $("#directUploadInput").fileupload({
         forceIframeTransport : true,
 //        url: "" // url option is for hr, not working
         acceptFileTypes: /(\.|\/)(txt|gif|jpe?g|png|mp4|MOV|mov|m4v)$/i,
         formData: formData,
-        // ダイアログでFileを選択すると呼ばれる。(複数ファイルのマルチアップロードがあることを想定)
+        // ダイアログでFileを選択すると呼ばれる。(マルチアップロードがあることを想定)
         add: function(e, data){
             // S3へダイレクトアップロードするURLおよび認証情報をサーバへ要求する。
             $.ajax({
@@ -38,16 +32,16 @@ function uploadFiles(){
                 type: "GET",
                 async:true,
             }).done(function(directUploadAuthorization, textStatus, jqXHR){
-                $("#pre-message").remove();
+                $("pre-message").remove();
                 var uploadUrl;
                 // ダイアログで選択したファイルごとに、進行状況を表示しながらアップロードする。
                 $.each(data.originalFiles, function(index, value){
                     var fileName = data.files[index].name.replace(".", "-");
                     $("#progress-" + fileName).remove();
                     $("#errorMessage-" + fileName).remove();
-                    $("#progress").append(
+                    $("#progress").appendChild(
                         $('<div id="progress-' + fileName +
-                          '"><div class="progress-bar"><span id="progress-ratio-' + fileName +
+                          '><div class="progress-bar"><span id="progress-ratio-' + fileName +
                           '">0</span>%</div>'));
                     $('#progress-' + fileName + ' .progress-bar').css('width', 0 + '%');
                     $("#progress-" + fileName).before($('<span id="upload-label-' + fileName
@@ -82,7 +76,6 @@ function uploadFiles(){
                     }
                     formData = new FormData();
                     if(isSupportedFile){
-                        // S3の一時認証情報を作成する。
                         uploadUrl = directUploadAuthorization.uploadUrl;
                         formData.append('key', directUploadAuthorization.objectKey + data.files[index].name);
                         formData.append('x-amz-credential', directUploadAuthorization.credential);
@@ -92,7 +85,6 @@ function uploadFiles(){
                         formData.append('x-amz-date', directUploadAuthorization.date);
                         formData.append('policy', directUploadAuthorization.policy);
                         formData.append('x-amz-signature', directUploadAuthorization.signature);
-                        // file自体は最後に設定する
                         formData.append('file', data.files[index]);
                         // S3へダイレクトアップロードする
                         $.ajax({
@@ -118,12 +110,12 @@ function uploadFiles(){
                             $("#progress-" + fileName).remove();
                         }).fail(function(jqXHR, textStatus, errorThrown){
                             $("#errorMessage-" + fileName).remove();
-                            $("#progress").after($('<span id="errorMessage-' + fileName + '" class="errorMessage">'
+                            $("#thumbnailPanel").after($('<span id="errorMessage-' + fileName + '" class="errorMessage">'
                                 + 'ファイルアップロード中にエラーが発生しました。' + fileName + '</span>'));
                         });
                     }else {
                         $("#errorMessage-" + fileName).remove();
-                        $("#progress").before($('<span id="errorMessage-' + fileName
+                        $("#thumbnailPanel").before($('<span id="errorMessage-' + fileName
                             + '" class="errorMessage">サポートされない形式です。'
                             + fileName + '</span>'));
                     }
