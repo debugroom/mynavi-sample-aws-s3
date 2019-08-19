@@ -10,6 +10,14 @@ function getTextFileBodyInS3() {
     });
 }
 
+function downloadFile() {
+    $.get("/downloadFile", function (data) {
+        var downloadLink = document.createElement("a");
+        downloadLink.href = data.toString();
+        downloadLink.click();
+    })
+}
+
 function uploadFiles(){
     var progressPanel = $("#progress");
     if(progressPanel != null){
