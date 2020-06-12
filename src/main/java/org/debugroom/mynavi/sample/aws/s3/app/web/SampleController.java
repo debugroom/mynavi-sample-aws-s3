@@ -52,7 +52,7 @@ public class SampleController {
     @GetMapping("portal")
     public String portal(Model model){
         model.addAttribute("imageUrl",
-                s3DirectDownloadHelper.getPresignedUrl("sample.jpg").toString());
+                s3DirectDownloadHelper.getPresignedUrl("sample2.jpg").toString());
         return "portal";
     }
 
